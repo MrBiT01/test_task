@@ -1,0 +1,15 @@
+Запускать:
+ansible-playbook -i inventory ansible.yml
+
+Для указания порта который будет слушать контейнер
+ansible-playbook -i inventory ansible.yml --extra-vars "src_port=<PORT>"
+
+Для указания директории на конечном сервере, в который будет скопирован Dockerfile и конфиг
+ansible-playbook -i inventory ansible.yml --extra-vars "path_work_dir=</path/to/dir>"
+
+Или для указания обоих переменных:
+ansible-playbook -i inventory ansible.yml --extra-vars "path_work_dir=</path/to/dir> src_port=<PORT>"
+
+Значения по умолчанию:
+path_work_dir: /tmp/project/
+src_port: 189

@@ -1,0 +1,34 @@
+- hosts: servers
+  user: ivan
+  become: yes
+  gather_facts: no
+  vars:
+    path_work_dir: /tmp/project/
+    src_port: 189
+  tasks:
+  - name: install Docker-pip
+    pip:
+      name: "{{ item }}"
+    with_items:
+      - docker
+      - docker-py
+    ignore_errors: true
+  - name: create Directory
+    shell: mkdir -p "{{path_work_dir}}"
+  - name: copy Dockerfile
+    copy:
+      src: ./Docker
+      dest: "{{path_work_dir}}"
+      mode: 777
+  - name: build image mynginx
+    docker_image: >
+      name=mynginx
+      path={{path_work_dir}}/Docker/
+      state=present
+  - name: run mynginx as mynginx_container
+    docker_container:
+      name: mynginx_container
+      image: mynginx
+      state: started
+      ports:
+       - "{{src_port}}:80"
